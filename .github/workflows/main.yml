@@ -1,0 +1,29 @@
+
+
+name: Download URL e Salva no Artifacts
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Permite rodar o workflow manualmente
+
+jobs:
+  download-and-save:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Cria um diretório para organizar os arquivos baixados
+    - name: Criar pasta para o download
+      run: mkdir -p downloads
+
+    # 2. Faz o download do arquivo a partir da URL fornecida
+    - name: Baixar arquivo da URL
+      run: |
+        curl -L "https://pncp.gov.br:32428/pncp-api/v1/orgaos/75732057000184/compras/2026/000157/arquivos/1" -o downloads/meu-arquivo.zip
+
+    # 3. Faz o upload do arquivo baixado para os Artifacts do GitHub
+    - name: Salvar nos Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: arquivo-baixado-resultado  # Nome que o artefato terá no GitHub
+        path: downloads/meu-arquivo.zip # Caminho do arquivo que foi baixado
